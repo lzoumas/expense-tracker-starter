@@ -14,18 +14,17 @@ npm run preview  # preview production build
 
 ## Architecture
 
-This is a minimal React 19 + Vite app with no routing, no state management library, and no backend. All state lives in a single `useState` call in `src/App.jsx`.
+This is a minimal React 19 + Vite app with no routing, no state management library, and no backend.
 
-**Key facts about the data model:**
-- Transactions have: `id`, `description`, `amount` (stored as string), `type` ("income" | "expense"), `category`, `date`
-- `amount` is stored as a string — arithmetic on it produces string concatenation bugs (intentional for the course)
-- "Freelance Work" in the seed data is typed as `"expense"` but categorized as `"salary"` (intentional bug)
+**Component tree:**
+- `App` — holds the `transactions` array in state (seeded with 8 hardcoded entries) and passes it down. The only logic here is `handleAdd`, which appends a new transaction.
+  - `Summary` — receives `transactions`, derives `totalIncome`, `totalExpenses`, and `balance` internally.
+  - `TransactionForm` — owns its own form state (`description`, `amount`, `type`, `category`); calls `onAdd(transaction)` prop on submit.
+  - `TransactionList` — owns its own filter state (`filterType`, `filterCategory`); receives `transactions` and filters them internally.
 
-**State in `App.jsx`:**
-- `transactions` — array of all transactions (seeded with 8 hardcoded entries)
-- `description`, `amount`, `type`, `category` — controlled form inputs for adding a transaction
-- `filterType`, `filterCategory` — filter state for the transaction table
-
-Totals (`totalIncome`, `totalExpenses`, `balance`) and `filteredTransactions` are derived directly in the render body on every render — no memoization.
+**Data model:**
+- Transactions have: `id`, `description`, `amount` (number), `type` ("income" | "expense"), `category`, `date`
+- `categories` constant is duplicated in `TransactionForm` and `TransactionList` — not yet shared.
+- "Freelance Work" in the seed data is typed as `"expense"` but categorized as `"salary"` (intentional bug for the course).
 
 Styling is plain CSS in `src/App.css` and `src/index.css`. No CSS framework or component library is used.
