@@ -17,10 +17,10 @@ npm run preview  # preview production build
 This is a minimal React 19 + Vite app with no routing, no state management library, and no backend.
 
 **Component tree:**
-- `App` — holds the `transactions` array in state (seeded with 8 hardcoded entries) and passes it down. The only logic here is `handleAdd`, which appends a new transaction.
-  - `Summary` — receives `transactions`, derives `totalIncome`, `totalExpenses`, and `balance` internally.
-  - `TransactionForm` — owns its own form state (`description`, `amount`, `type`, `category`); calls `onAdd(transaction)` prop on submit.
-  - `TransactionList` — owns its own filter state (`filterType`, `filterCategory`); receives `transactions` and filters them internally.
+- `App` — holds `transactions` state (seeded with 8 hardcoded entries); provides `handleAddTransaction` and `handleDeleteTransaction`.
+  - `Summary` — receives `transactions`, derives totals and balance internally.
+  - `TransactionForm` — owns form state; calls `onAdd(transaction)` on submit.
+  - `TransactionList` — owns filter state; receives `transactions` and `onDelete`; filters internally.
 
 **Data model:**
 - Transactions have: `id`, `description`, `amount` (number), `type` ("income" | "expense"), `category`, `date`
