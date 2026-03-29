@@ -1,6 +1,16 @@
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid } from 'recharts';
 
-const COLORS = ['#8884d8', '#83a6ed', '#8dd1e1', '#82ca9d', '#a4de6c', '#ffc658', '#ff8042', '#d84888'];
+const COLORS = {
+  food: '#fb923c',
+  housing: '#a855f7',
+  utilities: '#38bdf8',
+  transport: '#2dd4bf',
+  entertainment: '#f472b6',
+  salary: '#34d399',
+  other: '#94a3b8',
+};
+
+const FALLBACK_COLOR = '#fbbf24';
 
 function SpendingChart({ transactions }) {
   const spendingByCategory = transactions
@@ -22,14 +32,28 @@ function SpendingChart({ transactions }) {
   return (
     <div className="spending-chart">
       <h2>Spending by Category</h2>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data}>
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip formatter={(value) => `$${value}`} />
-          <Bar dataKey="value">
-            {data.map((_, index) => (
-              <Cell key={index} fill={COLORS[index % COLORS.length]} />
+      <ResponsiveContainer width="100%" height={280}>
+        <BarChart data={data} barSize={40} radius={[6, 6, 0, 0]}>
+          <CartesianGrid vertical={false} strokeDasharray="3 3" />
+          <XAxis
+            dataKey="name"
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: '#6b6560' }}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: '#6b6560' }}
+            tickFormatter={(v) => `$${v}`}
+          />
+          <Tooltip
+            formatter={(value) => [`$${value.toLocaleString()}`, 'Amount']}
+            cursor={{ fill: 'rgba(255,255,255,0.03)' }}
+          />
+          <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+            {data.map((entry, index) => (
+              <Cell key={index} fill={COLORS[entry.name] || FALLBACK_COLOR} />
             ))}
           </Bar>
         </BarChart>

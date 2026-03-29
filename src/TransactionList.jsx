@@ -16,49 +16,68 @@ function TransactionList({ transactions, onDelete }) {
 
   return (
     <div className="transactions">
-      <h2>Transactions</h2>
-      <div className="filters">
-        <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-          <option value="all">All Types</option>
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
-        <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
-          <option value="all">All Categories</option>
-          {categories.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
+      <div className="transactions-header">
+        <h2>Transactions</h2>
+        <div className="filters">
+          <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+            <option value="all">All Types</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+          <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+            <option value="all">All Categories</option>
+            {categories.map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTransactions.map(t => (
-            <tr key={t.id}>
-              <td>{t.date}</td>
-              <td>{t.description}</td>
-              <td>{t.category}</td>
-              <td className={t.type === "income" ? "income-amount" : "expense-amount"}>
-                {t.type === "income" ? "+" : "-"}${t.amount}
-              </td>
-              <td>
-                <button onClick={() => {
-                  if (window.confirm(`Are you sure you want to delete this transaction: ${t.description}?`)) onDelete(t.id);
-                }}>Delete</button>
-              </td>
+      <div className="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredTransactions.length === 0 ? (
+              <tr>
+                <td colSpan="5" className="empty-state">No transactions found</td>
+              </tr>
+            ) : (
+              filteredTransactions.map(t => (
+                <tr key={t.id}>
+                  <td>{t.date}</td>
+                  <td className="description-cell">{t.description}</td>
+                  <td>
+                    <span className={`category-badge category-badge--${t.category}`}>
+                      {t.category}
+                    </span>
+                  </td>
+                  <td className={t.type === "income" ? "amount-income" : "amount-expense"}>
+                    {t.type === "income" ? "+" : "-"}${t.amount.toLocaleString()}
+                  </td>
+                  <td>
+                    <button
+                      className="delete-btn"
+                      onClick={() => {
+                        if (window.confirm(`Delete "${t.description}"?`)) onDelete(t.id);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
