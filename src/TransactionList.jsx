@@ -60,11 +60,12 @@ function TransactionList({ transactions, onDelete }) {
                     </span>
                   </td>
                   <td className={t.type === "income" ? "amount-income" : "amount-expense"}>
-                    {t.type === "income" ? "+" : "-"}${t.amount.toLocaleString()}
+                    {t.type === "income" ? "+" : "-"}${t.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
                   <td>
                     <button
                       className="delete-btn"
+                      aria-label={`Delete ${t.description}`}
                       onClick={() => {
                         if (window.confirm(`Delete "${t.description}"?`)) onDelete(t.id);
                       }}

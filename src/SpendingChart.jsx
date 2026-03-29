@@ -48,7 +48,7 @@ function SpendingChart({ transactions }) {
             tickFormatter={(v) => `$${v}`}
           />
           <Tooltip
-            formatter={(value) => [`$${value.toLocaleString()}`, 'Amount']}
+            formatter={(value) => [`$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 'Amount']}
             cursor={{ fill: 'rgba(255,255,255,0.03)' }}
           />
           <Bar dataKey="value" radius={[6, 6, 0, 0]}>

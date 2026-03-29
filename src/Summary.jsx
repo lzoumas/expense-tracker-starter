@@ -23,7 +23,7 @@ function Summary({ transactions }) {
       </div>
       <div className="summary-card summary-card--balance">
         <h3>Balance</h3>
-        <p className="amount">${fmt(balance)}</p>
+        <p className="amount">{balance < 0 ? `-$${fmt(Math.abs(balance))}` : `$${fmt(balance)}`}</p>
       </div>
     </div>
   );
